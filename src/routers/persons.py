@@ -11,6 +11,8 @@
 
 from fastapi import APIRouter
 
+from src.model.person import Person
+
 router = APIRouter(
     prefix="/api/persons",
     tags=["persons"],
@@ -19,11 +21,11 @@ router = APIRouter(
 )
 
 fake_persons_db = [
-    {"id": 1, "name": "John Doe", "age": 30},
-    {"id": 2, "name": "Jane Smith", "age": 25},
-    {"id": 3, "name": "Alice Johnson", "age": 28},
+    {"id": 1, "name": "John", "surname": "Doe", "age": 30},
+    {"id": 2, "name": "Jane", "surname": "Smith", "age": 25},
+    {"id": 3, "name": "Alice", "surname": "Johnson", "age": 28},
 ]
 
 @router.get("/")
 async def read_persons():
-    return fake_persons_db
+    return [Person(**person) for person in fake_persons_db]

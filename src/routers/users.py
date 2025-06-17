@@ -11,6 +11,8 @@
 
 from fastapi import APIRouter
 
+from src.model.user import User
+
 router = APIRouter(
     prefix="/api/users",
     tags=["users"],
@@ -26,4 +28,4 @@ fake_users_db = [
 
 @router.get("/")
 async def read_users():
-    return fake_users_db
+    return [User(**user) for user in fake_users_db]
