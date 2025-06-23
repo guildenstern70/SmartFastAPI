@@ -14,8 +14,12 @@ from sqlalchemy import Column, Integer, String
 
 from src.models.base import Base
 
-
 class Person(BaseModel):
+    """
+    This class represents a person with attributes such as id, name, surname, and age.
+    This is a Pydantic model used for data validation and serialization.
+    You can use it as Data Transfer Object (DTO) in your API endpoints.
+    """
     id: int
     name: str
     surname: str
@@ -25,6 +29,10 @@ class Person(BaseModel):
         from_attributes = True # Enable ORM mode for compatibility with ORMs like SQLAlchemy
 
 class PersonDB(Base):
+    """
+    This class represents the database model for a person.
+    It inherits from SQLAlchemy's Base class and defines the table structure.
+    """
     __tablename__ = 'persons'
     id = Column(Integer, primary_key=True)
     name = Column(String)
