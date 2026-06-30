@@ -9,7 +9,7 @@
 
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from src.models.person import Person
 from src.services.person_service import PersonService
@@ -33,7 +33,7 @@ async def read_person(person_id: int):
     if person:
         return person
     else:
-        return {"error": "Person not found"}
+        raise HTTPException(status_code=404, detail="Person not found")
 
 @router.post("/", response_model=Person)
 async def create_person(person: Person):
@@ -46,4 +46,12 @@ async def update_person(person_id: int, person: Person):
     if updated_person:
         return updated_person
     else:
-        return {"error": "Person not found"}
+        raise HTTPException(status_code=404, detail="Person not found")
+
+@router.delete("/{person_id}")
+async def delete_person(person_id: int):
+    deleted = person_service.delete_person(person_id)
+    if deleted:
+        return {"message": "Person deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Person not found")

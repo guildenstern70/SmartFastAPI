@@ -58,8 +58,10 @@ db_initializer.populate()
 #
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return  templates.TemplateResponse(name="index.html.jinja",
-                                       request={"request": request},
-                                       context={"version": VERSION})
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html.jinja",
+        context={"version": VERSION}
+    )
 
 

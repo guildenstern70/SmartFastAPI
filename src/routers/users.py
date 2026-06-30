@@ -11,8 +11,7 @@
 
 from fastapi import APIRouter
 
-from src.models.user import UserDB
-from src.services.db_alchemy import DbAlchemy
+from src.services.user_service import UserService
 
 router = APIRouter(
     prefix="/api/users",
@@ -21,6 +20,8 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+user_service = UserService()
+
 @router.get("/")
 async def read_users():
-    return DbAlchemy().get_session().query(UserDB).all()
+    return user_service.get_all_users()
