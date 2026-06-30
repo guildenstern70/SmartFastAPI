@@ -32,9 +32,10 @@ src/
     db_alchemy.py      # DbAlchemy: engine + session factory (SQLite file at db/database.db)
     db_initializer.py  # DBInitializer: creates schema + seeds initial data on startup
     person_service.py  # PersonService: full CRUD via a long-lived SQLAlchemy session
+    user_service.py    # UserService: read-only queries via a long-lived SQLAlchemy session
   routers/
     persons.py         # /api/persons — full CRUD, uses PersonService
-    users.py           # /api/users  — read-only, calls DbAlchemy directly (no service layer)
+    users.py           # /api/users  — read-only, uses UserService
 templates/
   index.html.jinja     # Jinja2 home page template
 static/                # CSS and images mounted at /static
@@ -55,10 +56,7 @@ Services are instantiated **at module import time** (not via dependency injectio
 # src/routers/persons.py
 person_service = PersonService()  # module-level singleton
 ```
-`PersonService` opens a single SQLAlchemy session and registers `atexit` to close it.
-
-### Inconsistency to be aware of
-`users.py` router does **not** use a service — it queries `DbAlchemy` directly. New routers should follow the `persons.py` pattern (dedicated service class).
+`PersonService` and `UserService` each open a single SQLAlchemy session and register `atexit` to close it.
 
 ### Database initialisation flow
 `main.py` → `DBInitializer(db_alchemy).initialize()` → `Base.metadata.create_all(engine)` → then `.populate()` seeds rows only if the `persons` table is empty.
